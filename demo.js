@@ -15,7 +15,7 @@
     // sample route with a route the way we're used to seeing it
     // we dont use :sample, 
     app.get('/sample', function(req, res) {
-        res.send(`this is a sampleeeeee!`);
+        res.send(`this is a sampleeeeeee!`);
     });
 
     // ROUTES
