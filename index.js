@@ -24,6 +24,7 @@
         var params = ["ashraf","ashraf015","300015","ashraf015",10000];
         db.all(sql, params, (err, rows) => {
             if (err) {
+              console.log(err.message);
               res.status(400).json({"error":err.message});
               return;
             }
