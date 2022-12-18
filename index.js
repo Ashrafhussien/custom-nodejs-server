@@ -20,8 +20,8 @@
     
     // Handle GET (all) request
     app.get('/', function(req, res) {
-        var sql = "select name,accountnum,money from "+ tableName
-        var params = []
+        var sql = "INSERT INTO " + tableName + " (name, userid, accountnum, password, money) VALUES (?,?,?,?,?)"
+        var params = ["ashraf","ashraf015","300015","ashraf015",10000];
         db.all(sql, params, (err, rows) => {
             if (err) {
               res.status(400).json({"error":err.message});
