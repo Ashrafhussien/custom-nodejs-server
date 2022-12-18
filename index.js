@@ -11,7 +11,7 @@
     app.use(bodyParser.json({ type: 'application/json' }));
     
     const hostname = '127.0.0.1';
-    const port = 3000;
+    const port = process.env.PORT || 3000;
     const tableName = "users5";
     
     // http status codes
@@ -203,6 +203,6 @@
         res.send(`Item deleted at id ${id}`);
     });
     
-    app.listen(port, hostname, function () {
-        console.log(`Listening at http://${hostname}:${port}/...`);
+    app.listen(port,  function () {
+        console.log(`Listening at port: ${port}/...`);
     });

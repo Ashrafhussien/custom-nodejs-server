@@ -4,7 +4,7 @@
     var express = require('express');
     var app     = express();
     const hostname = '192.168.1.8';
-    const port = 3000;
+    const port = process.env.PORT || 3000;
     const router = require('./routes/users.js')
 
 
@@ -38,6 +38,6 @@
     // we'll create our routes here
 
     // START THE SERVER
-    app.listen(port, hostname, function () {
-        console.log(`Listening http://${hostname}:${port}/...`);
+    app.listen(port, function () {
+        console.log(`Listening at port: ${port}/...`);
     });
