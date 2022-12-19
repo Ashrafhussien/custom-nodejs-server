@@ -40,7 +40,7 @@
     });
     app.get('/jsonr',function(req,res){
         // Read users.json file
-        fs.readFile("temp.json", function(err, data) {
+        fs.readFile("tmp/temp.json", function(err, data) {
             // Check for errors
             if (err) throw err;
         
@@ -52,9 +52,9 @@
     });
     });   
     app.get('/json',function(req,res){
-        const temps = require("./temp");
+        const temps = require("./tmp/temp");
         temps.push(user);
-        fs.writeFile("temp.json", JSON.stringify(temps), err => {
+        fs.writeFile("./tmp/temp.json", JSON.stringify(temps), err => {
      
             // Checking for errors
             if (err) throw err; 
