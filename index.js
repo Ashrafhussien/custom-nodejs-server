@@ -4,6 +4,11 @@
     var bodyParser = require('body-parser');
     var db = require("./db.js")
     var app = express();
+    const fs = require("fs");
+    // Defining new user
+    let user = {
+        name: "New User"
+    };
     
     // bodyParser is a type of middleware
     // It helps convert JSON strings
@@ -33,56 +38,80 @@
           
           );
     });
-    
+    app.get('/jsonr',function(req,res){
+        // Read users.json file
+        fs.readFile("temp.json", function(err, data) {
+            // Check for errors
+            if (err) throw err;
+        
+            // Converting to JSON
+            var output = JSON.parse(data);
+            
+            console.log(output); // Print users 
+            res.send(output);
+    });
+    });   
+    app.get('/json',function(req,res){
+        const temps = require("./temp");
+        temps.push(user);
+        fs.writeFile("temp.json", JSON.stringify(temps), err => {
+     
+            // Checking for errors
+            if (err) throw err; 
+           
+            console.log("Done writing"); // Success
+        });
+        res.send("Done writing");
+        //res.end();
+    });
     // Handle GET (one) request
-    app.get('/:getType', function(req, res) {
-        var type = req.params.getType;
-        if(type == 'newAccountNum'){
-            var sql = "select MAX(accountnum) from " + tableName;
-            var parameters = [];
-            db.all(sql, parameters, (err, rows) => {
-                if (err) {
-                    //res.status(400).json({"error":err.message});
-                    console.log('err is found');
-                    console.log(err.message);
-                    console.log('');
-                    res.statusCode = statusNotFound;
-                    res.send(`something is wrong`);
-                    return;
-                  }try {
-                    var maxAccountNum = rows[0]['MAX(accountnum)'];
-                    maxAccountNum = parseInt(maxAccountNum) +1;  
-                    res.send(maxAccountNum.toString());
-                  }catch(e){
-                    res.statusCode = statusNotFound;
-                    res.send(`Account Number is wrong`);
-                  }
+    app.get('/newAccountNum', function(req, res) {
+        var sql = "select MAX(accountnum) from " + tableName;
+        var parameters = [];
+        db.all(sql, parameters, (err, rows) => {
+            if (err) {
+                //res.status(400).json({"error":err.message});
+                console.log('err is found');
+                console.log(err.message);
+                console.log('');
+                res.statusCode = statusNotFound;
+                res.send(`something is wrong`);
+                return;
+              }try {
+                var maxAccountNum = rows[0]['MAX(accountnum)'];
+                maxAccountNum = parseInt(maxAccountNum) +1;  
+                res.send(maxAccountNum.toString());
+              }catch(e){
+                res.statusCode = statusNotFound;
+                res.send(`Account Number is wrong`);
+              }
+        });
+    });
+
+    // Handle GET (one) request
+    app.get('/verifyAccountName', function(req, res) {
+        // http://127.0.0.1:3000/verifyAccountName?verify=300001
+        var accountNumToVerify = req.query.verify;
+        var sql = "select name from " + tableName + " WHERE accountnum=?";
+        var parameters = [accountNumToVerify];
+        db.all(sql, parameters, (err, rows) => {
+            if (err) {
+                //res.status(400).json({"error":err.message});
+                console.log('err is found');
+                console.log(err.message);
+                console.log('');
+                res.statusCode = statusNotFound;
+                res.send(`something is wrong`);
+                return;
+                }try {
+                var name = rows[0]['name'];
+                res.send(name);
+                }catch(e){
+                res.statusCode = statusNotFound;
+                res.send(`Account Number is wrong`);
+                }
             });
-        }else if (type == 'verifyAccountName'){
-            // http://127.0.0.1:3000/verifyAccountName?verify=300001
-            var accountNumToVerify = req.query.verify;
-            var sql = "select name from " + tableName + " WHERE accountnum=?";
-            var parameters = [accountNumToVerify];
-            db.all(sql, parameters, (err, rows) => {
-                if (err) {
-                    //res.status(400).json({"error":err.message});
-                    console.log('err is found');
-                    console.log(err.message);
-                    console.log('');
-                    res.statusCode = statusNotFound;
-                    res.send(`something is wrong`);
-                    return;
-                  }try {
-                    var name = rows[0]['name'];
-                    res.send(name);
-                  }catch(e){
-                    res.statusCode = statusNotFound;
-                    res.send(`Account Number is wrong`);
-                  }
-            });
-        }else {
-            res.send('Get request with invalid parameters');
-        }
+        
     });
     
     app.post('/:auth',function(req,res){
@@ -204,6 +233,6 @@
         res.send(`Item deleted at id ${id}`);
     });
     
-    app.listen(port,  function () {
+    app.listen(port, function () {
         console.log(`Listening at port: ${port}/...`);
     });
