@@ -5,6 +5,7 @@
     var db = require("./db.js")
     var app = express();
     const fs = require("fs");
+    const path = require('path');
     // Defining new user
     let user = {
         name: "New User"
@@ -51,10 +52,12 @@
             res.send(output);
     });
     });   
+    const filePath = path.join("/tmp", "temp.json");
+    console.log(filePath);
     app.get('/json',function(req,res){
         const temps = require("./tmp/temp");
         temps.push(user);
-        fs.writeFile("./tmp/temp.json", JSON.stringify(temps), err => {
+        fs.writeFile("tmp/temp.json", JSON.stringify(temps), err => {
      
             // Checking for errors
             if (err) throw err; 
