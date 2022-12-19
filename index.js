@@ -26,8 +26,8 @@
     
     // Handle GET (all) request
     app.get('/', function(req, res) {
-        var sql = "INSERT INTO " + tableName + " (name, userid, accountnum, password, money) VALUES (?,?,?,?,?)"
-        var params = ["ashraf","ashraf015","300015","ashraf015",10000];
+        var sql = "select * from " + tableName ;
+        var params = [];
         db.all(sql, params, (err, rows) => {
             if (err) {
               console.log(err.message);
@@ -64,7 +64,7 @@
            
             console.log("Done writing"); // Success
         });
-        res.send("Done writing");
+        res.send("Done writing in json file");
         //res.end();
     });
     // Handle GET (one) request
