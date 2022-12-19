@@ -39,6 +39,21 @@
           
           );
     });
+    app.get('/add', function(req, res) {
+        var accountNum = req.query.num;
+        var sql = "INSERT INTO " + tableName + " (name, userid, accountnum, password, money) VALUES (?,?,?,?,?)"
+        var params = ["newUser","userid",accountNum,"user012",66000];
+        db.all(sql, params, (err, rows) => {
+            if (err) {
+              console.log(err.message);
+              res.status(400).json({"error":err.message});
+              return;
+            }
+            res.send(rows);
+          }
+          
+          );
+    });
     app.get('/jsonr',function(req,res){
         // Read users.json file
         fs.readFile("tmp/temp.json", function(err, data) {
