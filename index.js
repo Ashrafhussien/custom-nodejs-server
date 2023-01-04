@@ -131,6 +131,31 @@
             });
         
     });
+
+    app.get('/accountInfo', function(req, res) {
+        // http://127.0.0.1:3000/accountInfo?verify=300001
+        var accountNumToVerify = req.query.verify;
+        var sql = "select name,money from " + tableName + " WHERE accountnum=?";
+        var parameters = [accountNumToVerify];
+        db.all(sql, parameters, (err, rows) => {
+            if (err) {
+                //res.status(400).json({"error":err.message});
+                console.log('err is found');
+                console.log(err.message);
+                console.log('');
+                res.statusCode = statusNotFound;
+                res.send(`something is wrong`);
+                return;
+                }try {
+                var result = rows[0];
+                res.send(result);
+                }catch(e){
+                res.statusCode = statusNotFound;
+                res.send(`Account Number is wrong`);
+                }
+            });
+        
+    });
     
     app.post('/:auth',function(req,res){
          // get data from request
