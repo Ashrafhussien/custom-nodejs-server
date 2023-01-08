@@ -122,6 +122,7 @@ adminRouter.patch('/addMoney', function(req, res) {
 });
 
 function verifySenderMoney(res,senderAccountNum,moneyToTransfer){
+    console.log('inside function');
     var sql = "select money from " + tableName + " WHERE accountnum=?";
     var parameters = [senderAccountNum];
     db.all(sql, parameters, (err, rows) => {
@@ -134,8 +135,10 @@ function verifySenderMoney(res,senderAccountNum,moneyToTransfer){
             res.send(err.message);
             return false;
             }try {
+            console.log('inside try');
             var money = rows[0]['money'];
             if(money>=moneyToTransfer){
+                console.log('inside money is great');
                 return true;
             } else {
                 res.statusCode = 500;
@@ -150,12 +153,14 @@ function verifySenderMoney(res,senderAccountNum,moneyToTransfer){
 }
 
 adminRouter.patch('/transferMoney', function(req, res) {
+    
     var body = req.body;
     var senderAccountNum = body.senderAccountNum;
     var receiverAccountNum = body.receiverAccountNum;
     var moneyToTransfer = body.moneyToTransfer;
     var confirmation = verifySenderMoney(res,senderAccountNum,moneyToTransfer);
     if(!confirmation){
+        console.log('inside conformation');
         return;
     }
     var senderSql = "UPDATE " + tableName + " set  money=money-? WHERE accountnum=? "
