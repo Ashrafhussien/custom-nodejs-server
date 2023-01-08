@@ -3,6 +3,11 @@ var adminRouter = express.Router();
 var db = require("./../db.js");
 const tableName = "users5";
 
+
+// http status codes
+const statusOK = 200;
+const statusNotFound = 404;
+
 adminRouter.post('/auth',function(req,res){
     var adminName = req.body.adminName;
     var password = req.body.password;

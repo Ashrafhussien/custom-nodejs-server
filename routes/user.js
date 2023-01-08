@@ -1,8 +1,12 @@
 var express = require('express');
 var userRouter = express.Router();
 var db = require("./../db.js");
-
 const tableName = "users5";
+
+
+// http status codes
+const statusOK = 200;
+const statusNotFound = 404;
 
 userRouter.post('/auth',function(req,res){
     var accountNumber = req.body.accountNumber;
