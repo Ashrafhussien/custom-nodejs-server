@@ -121,7 +121,7 @@ adminRouter.patch('/addMoney', function(req, res) {
     });   
 });
 
-function verifySenderMoney(senderAccountNum,moneyToTransfer){
+function verifySenderMoney(res,senderAccountNum,moneyToTransfer){
     var sql = "select money from " + tableName + " WHERE accountnum=?";
     var parameters = [senderAccountNum];
     db.all(sql, parameters, (err, rows) => {
@@ -154,7 +154,7 @@ adminRouter.patch('/transferMoney', function(req, res) {
     var senderAccountNum = body.senderAccountNum;
     var receiverAccountNum = body.receiverAccountNum;
     var moneyToTransfer = body.moneyToTransfer;
-    var confirmation = verifySenderMoney(senderAccountNum,moneyToTransfer);
+    var confirmation = verifySenderMoney(res,senderAccountNum,moneyToTransfer);
     if(!confirmation){
         return;
     }
