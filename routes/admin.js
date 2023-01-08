@@ -130,14 +130,21 @@ function verifySenderMoney(senderAccountNum,moneyToTransfer){
             console.log('err is found');
             console.log(err.message);
             console.log('');
+            res.statusCode = 502;
+            res.send(err.message);
             return false;
             }try {
             var money = rows[0]['money'];
             if(money>=moneyToTransfer){
                 return true;
-            } else {return false;}
+            } else {
+                res.statusCode = 500;
+                res.send('The money in sender account is less than money to transfer.');
+                return false;}
             }catch(e){
-            return false;
+                res.statusCode = 501;
+                res.send(e.message);
+                return false;
             }
         });
 }
@@ -149,8 +156,6 @@ adminRouter.patch('/transferMoney', function(req, res) {
     var moneyToTransfer = body.moneyToTransfer;
     var confirmation = verifySenderMoney(senderAccountNum,moneyToTransfer);
     if(!confirmation){
-        res.statusCode = 500;
-        res.send('The money in sender account is less than money to transfer.');
         return;
     }
     var senderSql = "UPDATE " + tableName + " set  money=money-? WHERE accountnum=? "
