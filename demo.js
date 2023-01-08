@@ -5,11 +5,11 @@
     var app     = express();
     const hostname = '192.168.1.8';
     const port = process.env.PORT || 3000;
-    const router = require('./routes/users.js')
+    const router = require('./routes/demo2.js')
 
 
     // apply the routes to our application
-    app.use(router);
+    app.use('/user',router);
 
 
     // sample route with a route the way we're used to seeing it

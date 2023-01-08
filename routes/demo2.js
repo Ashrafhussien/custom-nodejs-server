@@ -59,7 +59,7 @@ var express = require('express');
  });
 
  // about page route (http://localhost:8080/about)
- router.get('/about', function(req, res) {
+ router.get('/about/:name', function(req, res) {
      console.log('inside get/about');
      res.send('in the about page!');
  });
