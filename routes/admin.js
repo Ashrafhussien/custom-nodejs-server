@@ -1,5 +1,7 @@
 var express = require('express');
 var adminRouter = express.Router();
+var db = require("./../db.js");
+const tableName = "users5";
 
 adminRouter.post('/auth',function(req,res){
     var adminName = req.body.adminName;
