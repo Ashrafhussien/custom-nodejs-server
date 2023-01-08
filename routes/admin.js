@@ -116,11 +116,38 @@ adminRouter.patch('/addMoney', function(req, res) {
     });   
 });
 
+function verifySenderMoney(senderAccountNum,moneyToTransfer){
+    var sql = "select money from " + tableName + " WHERE accountnum=?";
+    var parameters = [senderAccountNum];
+    db.all(sql, parameters, (err, rows) => {
+        if (err) {
+            //res.status(400).json({"error":err.message});
+            console.log('err is found');
+            console.log(err.message);
+            console.log('');
+            return false;
+            }try {
+            var money = rows[0]['money'];
+            if(money>=moneyToTransfer){
+                return true;
+            } else {return false;}
+            }catch(e){
+            return false;
+            }
+        });
+}
+
 adminRouter.patch('/transferMoney', function(req, res) {
     var body = req.body;
     var senderAccountNum = body.senderAccountNum;
     var receiverAccountNum = body.receiverAccountNum;
     var moneyToTransfer = body.moneyToTransfer;
+    var confirmation = verifySenderMoney(senderAccountNum,moneyToTransfer);
+    if(!confirmation){
+        res.statusCode = 500;
+        res.send('The money in sender account is less than money to transfer.');
+        return;
+    }
     var senderSql = "UPDATE " + tableName + " set  money=money-? WHERE accountnum=? "
     var senderParameters = [moneyToTransfer,senderAccountNum];
     var receiverSql = "UPDATE " + tableName + " set  money=money+? WHERE accountnum=? "

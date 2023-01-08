@@ -11,10 +11,19 @@
     // apply the routes to our application
     app.use('/user',router);
 
-
+    function demoFun(req,res){
+        console.log('inside fun');
+    }
+    function lookupFun(req,res,next){
+        console.log('inside lookup fun');
+        res.send(`from lookup function`);
+    }
     // sample route with a route the way we're used to seeing it
     // we dont use :sample, 
-    app.get('/sample', function(req, res) {
+    app.get('/sample',lookupFun, function(req, res) {
+        console.log('before call fun');
+        demoFun();
+        console.log('after call fun');
         res.send(`this is a sampleeeeeee!`);
     });
 
